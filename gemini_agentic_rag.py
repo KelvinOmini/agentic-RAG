@@ -291,8 +291,11 @@ if st.session_state.google_api_key:
     qdrant_client = init_qdrant()
     
     # File/URL Upload Section
-    uploaded_file = None  # Or add file uploads in main UI if you want
-    web_url = ""
+    st.subheader("📁 Upload PDF Document")
+    uploaded_file = st.file_uploader("Upload a PDF", type=["pdf"])
+
+    st.subheader("🌐 Enter Web URL")
+    web_url = st.text_input("Web page URL")
 
     # Process documents
     if uploaded_file:
