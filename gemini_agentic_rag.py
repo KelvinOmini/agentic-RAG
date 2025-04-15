@@ -40,7 +40,7 @@ COLLECTION_NAME = "gemini-thinking-agent-agno"
 
 
 # Streamlit App Initialization
-st.title("KELVIN'S RAG AGENT")
+st.title("KELVIN'S RAG AGENT 🤖🔍📚")
 
 # Session State Initialization
 if 'google_api_key' not in st.session_state:
