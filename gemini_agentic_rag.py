@@ -51,8 +51,8 @@ if 'qdrant_url' not in st.session_state:
     st.session_state.qdrant_url = ""
 if 'vector_store' not in st.session_state:
     st.session_state.vector_store = None
-if 'processed_documents' not in st.session_state:
-    st.session_state.processed_documents = []
+# Always clear processed documents on app load
+st.session_state.processed_documents = []
 if 'history' not in st.session_state:
     st.session_state.history = []
 if 'exa_api_key' not in st.session_state:
