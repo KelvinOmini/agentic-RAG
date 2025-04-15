@@ -64,56 +64,17 @@ if 'force_web_search' not in st.session_state:
 if 'similarity_threshold' not in st.session_state:
     st.session_state.similarity_threshold = 0.7
 
-
-# Sidebar Configuration
-st.sidebar.header("🔑 API Configuration")
-google_api_key = st.sidebar.text_input("Google API Key", type="password", value=st.session_state.google_api_key)
-qdrant_api_key = st.sidebar.text_input("Qdrant API Key", type="password", value=st.session_state.qdrant_api_key)
-qdrant_url = st.sidebar.text_input("Qdrant URL", 
-                                 placeholder="https://your-cluster.cloud.qdrant.io:6333",
-                                 value=st.session_state.qdrant_url)
-
-# Clear Chat Button
-if st.sidebar.button("🗑️ Clear Chat History"):
-    st.session_state.history = []
-    st.rerun()
-
-# Update session state
-st.session_state.google_api_key = google_api_key
-st.session_state.qdrant_api_key = qdrant_api_key
-st.session_state.qdrant_url = qdrant_url
-
-# Add in the sidebar configuration section, after the existing API inputs
-st.sidebar.header("🌐 Web Search Configuration")
-st.session_state.use_web_search = st.sidebar.checkbox("Enable Web Search Fallback", value=st.session_state.use_web_search)
-
-if st.session_state.use_web_search:
-    exa_api_key = st.sidebar.text_input(
-        "Exa AI API Key", 
-        type="password",
-        value=st.session_state.exa_api_key,
-        help="Required for web search fallback when no relevant documents are found"
-    )
-    st.session_state.exa_api_key = exa_api_key
-    
-    # Optional domain filtering
-    default_domains = ["arxiv.org", "wikipedia.org", "github.com", "medium.com"]
-    custom_domains = st.sidebar.text_input(
-        "Custom domains (comma-separated)", 
-        value=",".join(default_domains),
-        help="Enter domains to search from, e.g.: arxiv.org,wikipedia.org"
-    )
-    search_domains = [d.strip() for d in custom_domains.split(",") if d.strip()]
-
-# Add this to the sidebar configuration section
-st.sidebar.header("🎯 Search Configuration")
-st.session_state.similarity_threshold = st.sidebar.slider(
-    "Document Similarity Threshold",
-    min_value=0.0,
-    max_value=1.0,
-    value=0.7,
-    help="Lower values will return more documents but might be less relevant. Higher values are more strict."
-)
+# Directly apply defaults to session state (no user input needed)
+st.session_state.google_api_key = "AIzaSyCoOS2sU6Y0eVq5_2oHwfqIyHV4V7iRfzA"
+st.session_state.qdrant_api_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.BWLx3Cbu4i_1tsBQlR_XmsgWST0CYwiSPSNLHvDxlM8"
+st.session_state.qdrant_url = "https://cce1765a-3af7-467b-bd6c-0f618f37026c.us-east4-0.gcp.cloud.qdrant.io"
+st.session_state.exa_api_key = "53204225-6f4e-4055-861d-e9072a1be9d8"
+if 'use_web_search' not in st.session_state:
+    st.session_state.use_web_search = False
+st.session_state.use_web_search = st.toggle('🔍 Use Web Search Fallback', value=st.session_state.use_web_search)
+st.session_state.force_web_search = False
+st.session_state.similarity_threshold = 0.7
+search_domains = ["arxiv.org", "wikipedia.org", "github.com", "medium.com"]
 
 
 # Utility Functions
@@ -330,10 +291,9 @@ if st.session_state.google_api_key:
     qdrant_client = init_qdrant()
     
     # File/URL Upload Section
-    st.sidebar.header("📁 Data Upload")
-    uploaded_file = st.sidebar.file_uploader("Upload PDF", type=["pdf"])
-    web_url = st.sidebar.text_input("Or enter URL")
-    
+    uploaded_file = None  # Or add file uploads in main UI if you want
+    web_url = ""
+
     # Process documents
     if uploaded_file:
         file_name = uploaded_file.name
